@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EREK</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Media Gallery</title>
 </head>
 <body>
     <header>
-        <h1>EREK</h1>
-        <button id="toggleTheme">Switch to Night Mode</button>
-    </header>
-
-    <section>
-        <h2>MORE TO COME</h2>
-        <p>Hold on to your butts.</p>
-        <button id="revealContent">Show Me More!</button>
-        <div id="hiddenContent" style="display: none;">
-            <p>This is a secret why are you clicking things you don't know?</p>
+        <h1>Media Gallery</h1>
+        <label for="file-input" id="upload-btn">Upload Media</label>
+        <input type="file" id="file-input" accept="image/*, audio/*" multiple style="display: none;">
+        <div>
+            <input type="text" id="tweet-input" placeholder="Share your thoughts..." />
+            <button id="tweet-btn">Post Tweet</button>
         </div>
-    </section>
+    </header>
+    <div class="gallery" id="gallery"></div>
 
-    <footer>
-        <p>&copy; 2024 Erik Rodriguez</p>
-    </footer>
+    <!-- Modal for images -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <img id="modal-image" alt="Preview" style="max-width: 100%;">
+        </div>
+    </div>
+
+    <!-- Modal for enlarged view of media -->
+    <div class="modal" id="enlargeModal">
+        <div class="enlarge-content">
+            <span class="close-enlarge" id="close-enlarge">&times;</span>
+            <img id="enlarge-image" alt="Enlarged Preview" style="max-width: 90%;">
+            <audio id="enlarge-audio" controls style="display: none;"></audio>
+            <p id="enlarged-text"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
