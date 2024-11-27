@@ -1,8 +1,4 @@
-let snippets = [
-  { id: 1, title: "Event Reminder", text: "Hi {student_name}, this is a reminder for {event_name} on {event_date}.", tags: ["#event", "#reminder"] },
-  { id: 2, title: "Follow-up Email", text: "Hi {student_name}, just checking in after our last meeting.", tags: ["#followup"] }
-];
-
+let snippets = JSON.parse(localStorage.getItem('snippets')) || [];
 let selectedSnippets = new Set();
 
 function renderSnippets(filteredSnippets = snippets) {
@@ -52,6 +48,7 @@ function toggleSnippetSelection(id, isChecked) {
 function deleteSelectedSnippets() {
   snippets = snippets.filter(snippet => !selectedSnippets.has(snippet.id));
   selectedSnippets.clear();
+  saveSnippets();
   renderSnippets();
   renderBulkSnippetList();
 }
@@ -83,12 +80,18 @@ function addSnippet() {
   const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag);
 
   if (title && text) {
-    snippets.push({ id: snippets.length + 1, title, text, tags });
+    const newSnippet = { id: snippets.length + 1, title, text, tags };
+    snippets.push(newSnippet);
+    saveSnippets();
     renderSnippets();
     closeModal();
   } else {
     alert('Please fill in all fields.');
   }
+}
+
+function saveSnippets() {
+  localStorage.setItem('snippets', JSON.stringify(snippets));
 }
 
 function openNewSnippetModal() {
@@ -112,25 +115,17 @@ function copyToClipboard(text) {
 
 function importSnippets(event) {
   const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function () {
-    try {
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function () {
       const importedSnippets = JSON.parse(reader.result);
-      const validSnippets = importedSnippets.filter(snippet => snippet.id && snippet.title && snippet.text && Array.isArray(snippet.tags));
-      if (validSnippets.length) {
-        snippets = [...snippets, ...validSnippets];
-        renderSnippets();
-        alert(`${validSnippets.length} snippets imported successfully!`);
-      } else {
-        alert('No valid snippets found in the file.');
-      }
-    } catch (e) {
-      alert('Invalid JSON file.');
-    }
-  };
-  reader.readAsText(file);
+      snippets = [...snippets, ...importedSnippets];
+      saveSnippets();
+      renderSnippets();
+    };
+    reader.readAsText(file);
+  }
 }
 
-//
+// Initial rendering
+renderSnippets();
