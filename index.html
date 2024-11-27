@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Media Gallery</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snippet Manager</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Media Gallery</h1>
-        <label for="file-input" id="upload-btn">Upload Media</label>
-        <input type="file" id="file-input" accept="image/*, audio/*" multiple style="display: none;">
-        <div>
-            <input type="text" id="tweet-input" placeholder="Share your thoughts..." />
-            <button id="tweet-btn">Post Tweet</button>
-        </div>
-    </header>
-    <div class="gallery" id="gallery"></div>
-
-    <!-- Modal for images -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <img id="modal-image" alt="Preview" style="max-width: 100%;">
-        </div>
+  <div id="snippet-manager">
+    <h1>Snippet Manager</h1>
+    <div class="toolbar">
+      <input type="text" id="search-bar" placeholder="Search snippets..." onkeyup="searchSnippets()" />
+      <button onclick="openNewSnippetModal()">+ Add New Snippet</button>
+      <button onclick="openBulkActionsModal()">Bulk Actions</button>
+      <button onclick="document.getElementById('file-input').click()">Import Snippets</button>
+      <input type="file" id="file-input" accept="application/json" onchange="importSnippets(event)" style="display: none;" />
     </div>
+    <div id="snippet-list"></div>
+  </div>
 
-    <!-- Modal for enlarged view of media -->
-    <div class="modal" id="enlargeModal">
-        <div class="enlarge-content">
-            <span class="close-enlarge" id="close-enlarge">&times;</span>
-            <img id="enlarge-image" alt="Enlarged Preview" style="max-width: 90%;">
-            <audio id="enlarge-audio" controls style="display: none;"></audio>
-            <p id="enlarged-text"></p>
-        </div>
+  <!-- Modal for adding new snippets -->
+  <div id="snippet-modal" class="modal">
+    <div class="modal-content">
+      <h2>Add New Snippet</h2>
+      <input type="text" id="snippet-title" placeholder="Title" />
+      <textarea id="snippet-text" placeholder="Snippet Text"></textarea>
+      <input type="text" id="snippet-tags" placeholder="Tags (comma-separated, e.g., #hire, #endjob)" />
+      <button onclick="addSnippet()">Save</button>
+      <button onclick="closeModal()">Cancel</button>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- Modal for bulk actions -->
+  <div id="bulk-actions-modal" class="modal">
+    <div class="modal-content">
+      <h2>Bulk Actions</h2>
+      <div id="bulk-snippet-list"></div>
+      <button onclick="deleteSelectedSnippets()">Delete Selected</button>
+      <button onclick="exportSelectedSnippets()">Export Selected</button>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
